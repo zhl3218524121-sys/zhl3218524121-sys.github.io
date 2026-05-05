@@ -9,6 +9,7 @@ import { MessageSquare, Send, CheckCircle } from 'lucide-react'
 export default function CommentSlot({ workId }) {
   const [form, setForm] = useState({ name: '', email: '', content: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const storageKey = `comments-${workId}`
   const pendingKey = `comments-pending-${workId}`
@@ -108,14 +109,27 @@ export default function CommentSlot({ workId }) {
         </div>
       </form>
 
-      {/* 管理员审核入口（隐藏提示） */}
+      {/* 管理员审核入口 - 需要密码 */}
       <div className="mt-3 pt-3 border-t border-dashed border-stone-200 dark:border-stone-700/30">
-        <details className="text-[10px]">
-          <summary className="opacity-20 cursor-pointer hover:opacity-40 transition-opacity select-none">
+        {!isAdmin ? (
+          <button
+            onClick={() => {
+              const pwd = prompt('请输入管理员密码')
+              if (pwd === 'admin888') setIsAdmin(true)
+            }}
+            className="text-[10px] opacity-20 hover:opacity-40 transition-opacity select-none"
+          >
             管理员
-          </summary>
-          <CommentAdmin workId={workId} />
-        </details>
+          </button>
+        ) : (
+          <div className="text-[10px]">
+            <div className="flex items-center justify-between mb-1">
+              <span className="opacity-40">管理员面板</span>
+              <button onClick={() => setIsAdmin(false)} className="opacity-30 hover:opacity-60">退出</button>
+            </div>
+            <CommentAdmin workId={workId} />
+          </div>
+        )}
       </div>
     </div>
   )

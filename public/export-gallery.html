@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>导出相册图片</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 24px; margin-bottom: 10px; color: #333; }
+    .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+    .step {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .step h2 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #333;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #333;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary {
+      background: #e5e5e5;
+      color: #333;
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .preview-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f0f0f0;
+      aspect-ratio: 1;
+    }
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preview-item .label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 6px 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .json-output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #92400e;
+      margin-top: 12px;
+    }
+    .note code {
+      background: rgba(0,0,0,0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 导出本地相册图片</h1>
+    <p class="subtitle">把浏览器 localStorage 里的图片导出为文件，放入仓库正式部署</p>
+
+    <!-- Step 1: 读取 -->
+    <div class="step">
+      <h2><span class="step-num">1</span>读取 localStorage 数据</h2>
+      <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+        点击按钮读取当前浏览器中存储的本地上传图片。
+      </p>
+      <button class="btn" onclick="loadPhotos()">读取本地图片</button>
+      <div id="loadResult"></div>
+    </div>
+
+    <!-- Step 2: 预览 -->
+    <div class="step" id="previewStep" style="display:none;">
+      <h2><span class="step-num">2</span>预览图片</h2>
+      <div id="previewGrid" class="preview-grid"></div>
+    </div>
+
+    <!-- Step 3: 导出 -->
+    <div class="step" id="exportStep" style="display:none;">
+      <h2><span class="step-num">3</span>导出图片文件</h2>
+      <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+        每张图片会单独下载。建议先创建一个文件夹来存放。
+      </p>
+      <div class="actions">
+        <button class="btn" onclick="downloadAll()">下载所有图片</button>
+        <button class="btn btn-secondary" onclick="copyJson()">复制 JSON 配置</button>
+      </div>
+      <div class="note">
+        <strong>下载后操作：</strong><br>
+        1. 把下载的图片放到项目 <code>public/assets/gallery/</code> 文件夹<br>
+        2. 把 JSON 配置粘贴到 <code>public/data/photos.json</code> 中<br>
+        3. 重新构建并推送
+      </div>
+      <div id="jsonOutput" class="json-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    let photos = [];
+
+    function loadPhotos() {
+      const data = localStorage.getItem('gallery-local');
+      const resultDiv = document.getElementById('loadResult');
+
+      if (!data) {
+        resultDiv.innerHTML = '<div class="empty">未找到本地图片数据。请先在相册页面上传图片。</div>';
+        return;
+      }
+
+      try {
+        photos = JSON.parse(data);
+        if (!Array.isArray(photos) || photos.length === 0) {
+          resultDiv.innerHTML = '<div class="empty">本地图片数据为空。</div>';
+          return;
+        }
+
+        resultDiv.innerHTML = `<div style="margin-top:12px;color:#059669;font-size:13px;">✅ 成功读取 ${photos.length} 张图片</div>`;
+
+        // 显示预览
+        const grid = document.getElementById('previewGrid');
+        grid.innerHTML = photos.map((p, i) => `
+          <div class="preview-item">
+            <img src="${p.src}" alt="${p.title}">
+            <div class="label">${p.title || '未命名'}</div>
+          </div>
+        `).join('');
+
+        document.getElementById('previewStep').style.display = 'block';
+        document.getElementById('exportStep').style.display = 'block';
+
+        // 生成 JSON
+        generateJson();
+      } catch (e) {
+        resultDiv.innerHTML = '<div class="empty" style="color:#dc2626;">解析数据失败：' + e.message + '</div>';
+      }
+    }
+
+    function generateJson() {
+      const jsonEntries = photos.map((p, i) => {
+        const ext = p.src.includes('image/png') ? 'png' : 'jpg';
+        const filename = `gallery_${i + 1}.${ext}`;
+        return {
+          id: `gallery-${Date.now()}-${i}`,
+          src: `/assets/gallery/${filename}`,
+          title: p.title || `图片 ${i + 1}`,
+          description: p.description || ''
+        };
+      });
+
+      const output = document.getElementById('jsonOutput');
+      output.textContent = JSON.stringify(jsonEntries, null, 2);
+      output.style.display = 'block';
+    }
+
+    function downloadAll() {
+      photos.forEach((p, i) => {
+        const ext = p.src.includes('image/png') ? 'png' : 'jpg';
+        const filename = `gallery_${i + 1}.${ext}`;
+        downloadBase64(p.src, filename);
+      });
+    }
+
+    function downloadBase64(base64Data, filename) {
+      const link = document.createElement('a');
+      link.href = base64Data;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function copyJson() {
+      const output = document.getElementById('jsonOutput');
+      navigator.clipboard.writeText(output.textContent).then(() => {
+        alert('JSON 配置已复制到剪贴板！');
+      });
+    }
+  </script>
+</body>
+</html>

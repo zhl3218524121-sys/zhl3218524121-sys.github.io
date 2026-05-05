@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { X, Plus, Upload } from 'lucide-react'
+import { X, Plus, Upload, Lock } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
 
 export default function GalleryPage() {
@@ -13,6 +13,7 @@ export default function GalleryPage() {
     }
   })
   const [showUpload, setShowUpload] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const fileRef = useRef(null)
 
   const allPhotos = [...(photos || []), ...localPhotos]
@@ -56,13 +57,26 @@ export default function GalleryPage() {
             <h1 className="text-2xl font-semibold mb-2">灵感板</h1>
             <p className="text-sm opacity-50">记录旅行、摄影与生活碎片</p>
           </div>
-          <button
-            onClick={() => setShowUpload(!showUpload)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 text-sm hover:opacity-90 transition-opacity"
-          >
-            <Plus size={16} />
-            添加图片
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={() => setShowUpload(!showUpload)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 text-sm hover:opacity-90 transition-opacity"
+            >
+              <Plus size={16} />
+              添加图片
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                const pwd = prompt('请输入管理员密码')
+                if (pwd === 'admin888') setIsAdmin(true)
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-stone-300 dark:border-stone-600 text-sm opacity-60 hover:opacity-100 transition-opacity"
+            >
+              <Lock size={14} />
+              管理
+            </button>
+          )}
         </div>
 
         {/* 上传区域 */}
@@ -106,8 +120,8 @@ export default function GalleryPage() {
                 <h3 className="text-white font-medium text-sm mb-1">{photo.title}</h3>
                 <p className="text-white/70 text-xs leading-relaxed">{photo.description}</p>
               </div>
-              {/* 本地图片删除按钮 */}
-              {photo.isLocal && (
+              {/* 本地图片删除按钮 - 仅管理员可见 */}
+              {photo.isLocal && isAdmin && (
                 <button
                   onClick={(e) => { e.stopPropagation(); deleteLocalPhoto(photo.id) }}
                   className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
