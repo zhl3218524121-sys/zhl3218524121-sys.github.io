@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply antialiased text-stone-800 bg-stone-50 transition-colors duration-400;
+  }
+}
+
+/* 深色模式 */
+html.dark body {
+  color: #e7e5e4;
+  background-color: #1c1917;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 dark:bg-stone-800/70 backdrop-blur-md;
+  }
+  .glass-strong {
+    @apply bg-white/85 dark:bg-stone-800/85 backdrop-blur-lg;
+  }
+}
+
+/* 简单 tooltip */
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* 上方 tooltip（用于横向排列的图标） */
+.tooltip-top {
+  position: relative;
+}
+.tooltip-top::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.tooltip-top:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* 评论预留区域样式 */
+.comment-slot {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e7e5e4;
+}
+html.dark .comment-slot {
+  border-color: rgba(68, 64, 60, 0.5);
+}

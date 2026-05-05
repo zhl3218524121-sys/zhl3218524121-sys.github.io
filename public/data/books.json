@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "title": "黑客与画家",
+    "author": "保罗·格雷厄姆",
+    "cover": "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=450&fit=crop",
+    "recommendation": "关于编程、创业与思考的散文集，启发我重新审视技术的价值。",
+    "url": "https://book.douban.com/subject/6021440/"
+  },
+  {
+    "id": 3,
+    "title": "深度工作",
+    "author": "卡尔·纽波特",
+    "cover": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=300&h=450&fit=crop",
+    "recommendation": "在碎片化时代重拾专注力的实用指南，对我的工作方式影响深远。",
+    "url": "https://book.douban.com/subject/27056409/"
+  },
+  {
+    "id": 4,
+    "title": "代码整洁之道",
+    "author": "Robert C. Martin",
+    "cover": "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=300&h=450&fit=crop",
+    "recommendation": "每位程序员都应该反复阅读的经典，好的代码是写给人看的。",
+    "url": "https://book.douban.com/subject/4199741/"
+  }
+]

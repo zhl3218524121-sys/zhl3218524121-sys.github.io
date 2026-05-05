@@ -1,0 +1,46 @@
+{
+  "site": {
+    "title": "章海林 | 个人品牌网站",
+    "name": "章海林",
+    "brand": "Zhang Hai Lin",
+    "tagline": "控制科学与工程 / 机器人学 / 嵌入式系统研发",
+    "bio": "具备扎实的机器人工程背景与系统工程思维。擅长将自动控制理论转化为实际的硬件驱动逻辑。不仅专注于底层开发，同时在复杂网络架构优化与系统级仿真领域有深入研究。具备极强的自我驱动力与逻辑推演能力，追求在技术深度与系统稳定性之间实现最优平衡。",
+    "status": "可合作",
+    "avatar": "/assets/avatar/avatar.jpg",
+    "resumePdf": "/assets/resume/resume.pdf",
+    "email": "3218524121@qq.com"
+  },
+  "social": {
+    "github": "https://github.com/zhl3218524121-sys",
+    "twitter": "",
+    "email": "3218524121@qq.com"
+  },
+  "services": {
+    "web3formsKey": "e0870d7e-e552-416c-83af-e347e7ada6f1",
+    "mailchimpUrl": "YOUR_MAILCHIMP_URL_HERE",
+    "githubUsername": "github"
+  },
+  "comments": {
+    "enabled": false,
+    "provider": "giscus",
+    "repo": "your-username/your-repo",
+    "repoId": "",
+    "category": "Comments",
+    "categoryId": "",
+    "mapping": "pathname",
+    "reactionsEnabled": true,
+    "emitMetadata": false,
+    "inputPosition": "top",
+    "theme": "preferred_color_scheme",
+    "lang": "zh-CN",
+    "loading": "lazy"
+  },
+  "background": {
+    "interval": 8000,
+    "images": [
+      "/assets/bg/bg1.jpg",
+      "/assets/bg/bg2.jpg",
+      "/assets/bg/bg3.jpg"
+    ]
+  }
+}
