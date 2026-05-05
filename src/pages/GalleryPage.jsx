@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react'
-import { X, Plus, Upload, Lock, Download, Copy, CheckCircle } from 'lucide-react'
+import { X, Plus, Upload, Lock, Download, Copy, CheckCircle, LogOut } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
+import { useAdminAuth } from '../hooks/useAdminAuth'
 
 export default function GalleryPage() {
   const { data: photos } = useJsonData('/data/photos.json')
+  const { user, isAdmin, login, logout, error } = useAdminAuth()
   const [lightbox, setLightbox] = useState(null)
   const [localPhotos, setLocalPhotos] = useState(() => {
     try {
@@ -13,9 +15,10 @@ export default function GalleryPage() {
     }
   })
   const [showUpload, setShowUpload] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
   const [showExport, setShowExport] = useState(false)
-  const [exportStatus, setExportStatus] = useState('idle') // idle | copied
+  const [showLogin, setShowLogin] = useState(false)
+  const [exportStatus, setExportStatus] = useState('idle')
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const fileRef = useRef(null)
 
   const allPhotos = [...(photos || []), ...localPhotos]
@@ -51,6 +54,15 @@ export default function GalleryPage() {
     })
   }
 
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    const success = await login(loginForm.email, loginForm.password)
+    if (success) {
+      setShowLogin(false)
+      setLoginForm({ email: '', password: '' })
+    }
+  }
+
   return (
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-6xl mx-auto">
@@ -61,20 +73,18 @@ export default function GalleryPage() {
           </div>
           {isAdmin ? (
             <div className="flex items-center gap-3">
-              <span className="text-xs opacity-40">管理员模式</span>
+              <span className="text-xs opacity-40">{user?.email}</span>
               <button
-                onClick={() => setIsAdmin(false)}
-                className="text-xs opacity-40 hover:opacity-70 transition-opacity"
+                onClick={logout}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-stone-300 dark:border-stone-600 text-xs opacity-60 hover:opacity-100 transition-opacity"
               >
+                <LogOut size={12} />
                 退出
               </button>
             </div>
           ) : (
             <button
-              onClick={() => {
-                const pwd = prompt('请输入管理员密码')
-                if (pwd === 'admin888') setIsAdmin(true)
-              }}
+              onClick={() => setShowLogin(true)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-stone-300 dark:border-stone-600 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
               <Lock size={14} />
@@ -82,6 +92,42 @@ export default function GalleryPage() {
             </button>
           )}
         </div>
+
+        {/* 登录弹窗 */}
+        {showLogin && (
+          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowLogin(false)}>
+            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 w-full max-w-sm shadow-xl" onClick={e => e.stopPropagation()}>
+              <h3 className="text-lg font-medium mb-4">管理员登录</h3>
+              <form onSubmit={handleLogin} className="space-y-3">
+                <input
+                  type="email"
+                  required
+                  placeholder="邮箱"
+                  value={loginForm.email}
+                  onChange={e => setLoginForm(f => ({ ...f, email: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-stone-400/30"
+                />
+                <input
+                  type="password"
+                  required
+                  placeholder="密码"
+                  value={loginForm.password}
+                  onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-stone-400/30"
+                />
+                {error && <p className="text-xs text-red-500">{error}</p>}
+                <div className="flex gap-2 pt-2">
+                  <button type="submit" className="flex-1 px-4 py-2 rounded-lg bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 text-sm hover:opacity-90 transition-opacity">
+                    登录
+                  </button>
+                  <button type="button" onClick={() => setShowLogin(false)} className="px-4 py-2 rounded-lg border border-stone-300 dark:border-stone-600 text-sm hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                    取消
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* 管理员功能区：上传 + 导出 */}
         {isAdmin && (

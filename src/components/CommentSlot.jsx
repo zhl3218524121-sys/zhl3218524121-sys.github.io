@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { MessageSquare, Send, CheckCircle } from 'lucide-react'
+import { MessageSquare, Send, CheckCircle, LogOut, Lock } from 'lucide-react'
+import { useAdminAuth } from '../hooks/useAdminAuth'
 
 /**
  * 本地评论系统
@@ -7,9 +8,11 @@ import { MessageSquare, Send, CheckCircle } from 'lucide-react'
  * 评论者提交后看到"评论已提交"，不知道需要审核
  */
 export default function CommentSlot({ workId }) {
+  const { user, isAdmin, login, logout, error } = useAdminAuth()
   const [form, setForm] = useState({ name: '', email: '', content: '' })
   const [submitted, setSubmitted] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' })
 
   const storageKey = `comments-${workId}`
   const pendingKey = `comments-pending-${workId}`
@@ -39,6 +42,15 @@ export default function CommentSlot({ workId }) {
 
   // 读取已审核的评论
   const approvedComments = JSON.parse(localStorage.getItem(storageKey) || '[]')
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    const success = await login(loginForm.email, loginForm.password)
+    if (success) {
+      setShowLogin(false)
+      setLoginForm({ email: '', password: '' })
+    }
+  }
 
   return (
     <div className="comment-slot">
@@ -109,14 +121,11 @@ export default function CommentSlot({ workId }) {
         </div>
       </form>
 
-      {/* 管理员审核入口 - 需要密码 */}
+      {/* 管理员审核入口 - Firebase 认证 */}
       <div className="mt-3 pt-3 border-t border-dashed border-stone-200 dark:border-stone-700/30">
         {!isAdmin ? (
           <button
-            onClick={() => {
-              const pwd = prompt('请输入管理员密码')
-              if (pwd === 'admin888') setIsAdmin(true)
-            }}
+            onClick={() => setShowLogin(true)}
             className="text-[10px] opacity-20 hover:opacity-40 transition-opacity select-none"
           >
             管理员
@@ -124,13 +133,52 @@ export default function CommentSlot({ workId }) {
         ) : (
           <div className="text-[10px]">
             <div className="flex items-center justify-between mb-1">
-              <span className="opacity-40">管理员面板</span>
-              <button onClick={() => setIsAdmin(false)} className="opacity-30 hover:opacity-60">退出</button>
+              <span className="opacity-40">管理员面板 ({user?.email})</span>
+              <button onClick={logout} className="opacity-30 hover:opacity-60 inline-flex items-center gap-1">
+                <LogOut size={10} />
+                退出
+              </button>
             </div>
             <CommentAdmin workId={workId} />
           </div>
         )}
       </div>
+
+      {/* 登录弹窗 */}
+      {showLogin && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowLogin(false)}>
+          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 w-full max-w-sm shadow-xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-medium mb-4">管理员登录</h3>
+            <form onSubmit={handleLogin} className="space-y-3">
+              <input
+                type="email"
+                required
+                placeholder="邮箱"
+                value={loginForm.email}
+                onChange={e => setLoginForm(f => ({ ...f, email: e.target.value }))}
+                className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-stone-400/30"
+              />
+              <input
+                type="password"
+                required
+                placeholder="密码"
+                value={loginForm.password}
+                onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
+                className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-stone-400/30"
+              />
+              {error && <p className="text-xs text-red-500">{error}</p>}
+              <div className="flex gap-2 pt-2">
+                <button type="submit" className="flex-1 px-4 py-2 rounded-lg bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 text-sm hover:opacity-90 transition-opacity">
+                  登录
+                </button>
+                <button type="button" onClick={() => setShowLogin(false)} className="px-4 py-2 rounded-lg border border-stone-300 dark:border-stone-600 text-sm hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                  取消
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
