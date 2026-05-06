@@ -46,7 +46,7 @@ export default function HomePage() {
           {/* 左侧：个人资料 */}
           <div className="lg:col-span-4 space-y-4">
             {/* 头像卡片 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-3xl border border-white/15 p-10 text-center">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10 text-center">
               <div className="relative mx-auto mb-4 w-24 h-24">
                 <img
                   src={site?.avatar || 'https://via.placeholder.com/200'}
@@ -76,7 +76,7 @@ export default function HomePage() {
             </div>
 
             {/* 社交链接 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-white/15 p-8">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-2xl border border-white/15 p-8">
               <h3 className="text-xs font-semibold text-white/50 mb-3">社交链接</h3>
               <div className="flex justify-center">
                 <SocialIcons social={social} />
@@ -84,7 +84,7 @@ export default function HomePage() {
             </div>
 
             {/* 技术栈 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-white/15 p-8">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-2xl border border-white/15 p-8">
               <h3 className="text-xs font-semibold text-white/50 mb-3">技术栈</h3>
               <div className="flex flex-wrap gap-2">
                 {topSkills.map(skill => (
@@ -99,7 +99,7 @@ export default function HomePage() {
           {/* 右侧：内容区 */}
           <div className="lg:col-span-8 space-y-4">
             {/* 关于 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-3xl border border-white/15 p-10">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <h2 className="text-sm font-semibold text-white/70 mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 关于
@@ -111,7 +111,7 @@ export default function HomePage() {
             </div>
 
             {/* 精选作品 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-3xl border border-white/15 p-10">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-semibold text-white/70">精选作品</h2>
                 <Link to="/works" className="text-xs text-white/40 hover:text-white transition-colors">查看全部 →</Link>
@@ -136,7 +136,7 @@ export default function HomePage() {
             </div>
 
             {/* 核心技能 */}
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-3xl border border-white/15 p-10">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-semibold text-white/70">核心技能</h2>
                 <Link to="/skills" className="text-xs text-white/40 hover:text-white transition-colors">查看全部 →</Link>
