@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage'
 import WorksPage from './pages/WorksPage'
 import ProjectDetailPage from './pages/ProjectDetailPage'
 import GalleryPage from './pages/GalleryPage'
+import TimelinePage from './pages/TimelinePage'
 import ResumePage from './pages/ResumePage'
 import ArticlesPage from './pages/ArticlesPage'
 import ArticleDetailPage from './pages/ArticleDetailPage'
@@ -34,6 +35,7 @@ function App() {
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/articles/:id" element={<ArticleDetailPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/skills" element={<SkillsPage />} />
