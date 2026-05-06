@@ -63,10 +63,14 @@ export default function ProjectDetailPage() {
               <Layers size={16} className="opacity-50" />
               系统架构
             </h2>
-            <div
-              className="w-full rounded-2xl overflow-hidden border border-stone-200/30 dark:border-stone-700/30 bg-white dark:bg-stone-900/50"
-              dangerouslySetInnerHTML={{ __html: architecture.svg }}
-            />
+            <div className="w-full rounded-2xl overflow-hidden border border-stone-200/30 dark:border-stone-700/30 bg-white dark:bg-stone-900/50">
+              <img
+                src={`/assets/architectures/${work.id}.svg`}
+                alt={architecture.title}
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
             <p className="text-xs opacity-40 mt-2 text-center">{architecture.description}</p>
           </div>
         )}
