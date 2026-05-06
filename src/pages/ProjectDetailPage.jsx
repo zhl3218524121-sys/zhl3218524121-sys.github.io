@@ -8,8 +8,11 @@ export default function ProjectDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { data: works } = useJsonData('/data/works.json')
+  const { data: architectures } = useJsonData('/data/architectures.json')
 
   const work = works?.find(w => w.id === Number(id))
+  const architecture = work ? architectures?.[work.id] : null
+  const detail = work?.detail
 
   if (!work) {
     return (
@@ -26,10 +29,6 @@ export default function ProjectDetailPage() {
       </div>
     )
   }
-
-  const { data: architectures } = useJsonData('/data/architectures.json')
-  const architecture = architectures?.[work.id]
-  const detail = work.detail
 
   return (
     <div className="pt-24 pb-20 px-6">
