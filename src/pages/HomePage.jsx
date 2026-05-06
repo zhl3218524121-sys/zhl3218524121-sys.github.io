@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Github, Mail, Briefcase, Download } from 'lucide-react'
 import BgSwitcher from '../components/BgSwitcher'
-import StatusBadge from '../components/StatusBadge'
+
 import SocialIcons from '../components/SocialIcons'
 import { useJsonData } from '../hooks/useJsonData'
 
@@ -53,9 +53,7 @@ export default function HomePage() {
                   alt="avatar"
                   className="w-full h-full rounded-full object-cover border-2 border-white/30 shadow-xl"
                 />
-                <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2">
-                  <StatusBadge text={site?.status || '可合作'} />
-                </div>
+
               </div>
               <h1 className="text-2xl font-bold text-white mb-1">{site?.name || '章海林'}</h1>
               <p className="text-sm text-white/60 mb-4">{site?.tagline || '控制科学与工程 / 机器人学 / 嵌入式系统研发'}</p>
