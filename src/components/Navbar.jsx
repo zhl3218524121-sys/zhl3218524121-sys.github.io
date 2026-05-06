@@ -6,6 +6,7 @@ const navItems = [
   { path: '/', label: '首页' },
   { path: '/about', label: '关于' },
   { path: '/works', label: '作品' },
+  { path: '/articles', label: '文章' },
   { path: '/gallery', label: '灵感' },
   { path: '/resume', label: '简历' },
   { path: '/skills', label: '技能' },

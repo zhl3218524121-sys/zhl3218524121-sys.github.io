@@ -11,6 +11,8 @@ import WorksPage from './pages/WorksPage'
 import ProjectDetailPage from './pages/ProjectDetailPage'
 import GalleryPage from './pages/GalleryPage'
 import ResumePage from './pages/ResumePage'
+import ArticlesPage from './pages/ArticlesPage'
+import ArticleDetailPage from './pages/ArticleDetailPage'
 import BooksPage from './pages/BooksPage'
 import SkillsPage from './pages/SkillsPage'
 import ContactPage from './pages/ContactPage'
@@ -29,6 +31,8 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/works" element={<WorksPage />} />
           <Route path="/works/:id" element={<ProjectDetailPage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/articles/:id" element={<ArticleDetailPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="/books" element={<BooksPage />} />
