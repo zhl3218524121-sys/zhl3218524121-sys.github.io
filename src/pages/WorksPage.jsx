@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react'
-import { ExternalLink, Github } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { ExternalLink, Github, ArrowRight } from 'lucide-react'
 import ShareButtons from '../components/ShareButtons'
-import CommentSlot from '../components/CommentSlot'
 import { useJsonData } from '../hooks/useJsonData'
+import { SimpleTechTag } from '../components/TechTag'
 
 export default function WorksPage() {
+  const navigate = useNavigate()
   const { data: works } = useJsonData('/data/works.json')
   const [filter, setFilter] = useState('全部')
 
@@ -50,7 +52,10 @@ export default function WorksPage() {
               key={work.id}
               className="group rounded-2xl overflow-hidden border border-stone-200/40 dark:border-stone-700/40 bg-white dark:bg-stone-800/40 hover:shadow-lg hover:shadow-stone-200/20 dark:hover:shadow-stone-900/30 transition-all duration-400"
             >
-              <div className="aspect-[3/2] overflow-hidden bg-stone-100 dark:bg-stone-800">
+              <div
+                className="aspect-[3/2] overflow-hidden bg-stone-100 dark:bg-stone-800 cursor-pointer"
+                onClick={() => navigate(`/works/${work.id}`)}
+              >
                 <img
                   src={work.image}
                   alt={work.title}
@@ -59,23 +64,23 @@ export default function WorksPage() {
                 />
               </div>
               <div className="p-5">
-                <h3 className="font-medium mb-1.5">{work.title}</h3>
+                <h3
+                  className="font-medium mb-1.5 cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  onClick={() => navigate(`/works/${work.id}`)}
+                >
+                  {work.title}
+                </h3>
                 <p className="text-sm opacity-60 leading-relaxed mb-4 line-clamp-2">
                   {work.description}
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {work.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 text-[11px] rounded-md bg-stone-100 dark:bg-stone-700/50 opacity-70"
-                    >
-                      {tag}
-                    </span>
+                    <SimpleTechTag key={tag} label={tag} />
                   ))}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {work.demoUrl && (
+                    {work.demoUrl && work.demoUrl !== '#' && (
                       <a
                         href={work.demoUrl}
                         target="_blank"
@@ -86,7 +91,7 @@ export default function WorksPage() {
                         演示
                       </a>
                     )}
-                    {work.sourceUrl && (
+                    {work.sourceUrl && work.sourceUrl !== '#' && (
                       <a
                         href={work.sourceUrl}
                         target="_blank"
@@ -98,11 +103,17 @@ export default function WorksPage() {
                       </a>
                     )}
                   </div>
-                  <ShareButtons url={work.demoUrl} title={work.title} />
+                  <div className="flex items-center gap-3">
+                    <ShareButtons url={work.demoUrl} title={work.title} />
+                    <button
+                      onClick={() => navigate(`/works/${work.id}`)}
+                      className="inline-flex items-center gap-1 text-xs opacity-60 hover:opacity-100 transition-opacity"
+                    >
+                      详情
+                      <ArrowRight size={13} />
+                    </button>
+                  </div>
                 </div>
-
-                {/* 评论预留区域 */}
-                <CommentSlot workId={work.id} />
               </div>
             </article>
           ))}

@@ -8,6 +8,7 @@ import ThemeMenu from './components/ThemeMenu'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import WorksPage from './pages/WorksPage'
+import ProjectDetailPage from './pages/ProjectDetailPage'
 import GalleryPage from './pages/GalleryPage'
 import ResumePage from './pages/ResumePage'
 import BooksPage from './pages/BooksPage'
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/works" element={<WorksPage />} />
+          <Route path="/works/:id" element={<ProjectDetailPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="/books" element={<BooksPage />} />
