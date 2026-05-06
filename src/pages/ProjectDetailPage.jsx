@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ExternalLink, Github, Play, Wrench, Target, Award, AlertTriangle, Lightbulb } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Github, Play, Wrench, Target, Award, AlertTriangle, Lightbulb, Layers } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
 import { TechCategory } from '../components/TechTag'
 import CommentSlot from '../components/CommentSlot'
@@ -27,6 +27,8 @@ export default function ProjectDetailPage() {
     )
   }
 
+  const { data: architectures } = useJsonData('/data/architectures.json')
+  const architecture = architectures?.[work.id]
   const detail = work.detail
 
   return (
@@ -53,6 +55,21 @@ export default function ProjectDetailPage() {
         {/* 标题 */}
         <h1 className="text-3xl font-semibold mb-3">{work.title}</h1>
         <p className="text-base opacity-60 leading-relaxed mb-8">{work.description}</p>
+
+        {/* 系统架构图 */}
+        {architecture && (
+          <div className="mb-10">
+            <h2 className="text-sm font-medium mb-4 flex items-center gap-2 opacity-80">
+              <Layers size={16} className="opacity-50" />
+              系统架构
+            </h2>
+            <div
+              className="w-full rounded-2xl overflow-hidden border border-stone-200/30 dark:border-stone-700/30 bg-white dark:bg-stone-900/50"
+              dangerouslySetInnerHTML={{ __html: architecture.svg }}
+            />
+            <p className="text-xs opacity-40 mt-2 text-center">{architecture.description}</p>
+          </div>
+        )}
 
         {/* 技术栈标签 */}
         {work.techCategories && (
