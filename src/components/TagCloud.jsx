@@ -49,11 +49,10 @@ export default function TagCloud({ onTagClick, activeTag }) {
             className={`px-2.5 py-1 rounded-full border text-xs transition-all duration-200 hover:scale-105 ${
               isActive
                 ? 'bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 border-transparent'
-                : 'border-stone-200 dark:border-stone-700 hover:border-stone-400 dark:hover:border-stone-500'
+                : 'border-white/30 bg-white/10 text-white/90 hover:bg-white/20 hover:border-white/40'
             }`}
             style={{
               fontSize: `${size}rem`,
-              opacity: isActive ? 1 : opacity,
             }}
           >
             {tag}
