@@ -2,11 +2,13 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Clock, Tag, ArrowRight, BookOpen } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
+import TagCloud from '../components/TagCloud'
 
 export default function ArticlesPage() {
   const navigate = useNavigate()
   const { data: articles } = useJsonData('/data/articles.json')
   const [filter, setFilter] = useState('全部')
+  const [tagFilter, setTagFilter] = useState(null)
 
   const allCategories = useMemo(() => {
     if (!articles) return ['全部']
@@ -16,55 +18,115 @@ export default function ArticlesPage() {
 
   const filtered = useMemo(() => {
     if (!articles) return []
-    if (filter === '全部') return articles
-    return articles.filter(a => a.category === filter)
-  }, [articles, filter])
+    let result = articles
+    if (filter !== '全部') {
+      result = result.filter(a => a.category === filter)
+    }
+    if (tagFilter) {
+      result = result.filter(a => a.tags?.includes(tagFilter))
+    }
+    return result
+  }, [articles, filter, tagFilter])
 
   const featured = articles?.filter(a => a.featured) || []
 
   return (
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-2">技术文章</h1>
-        <p className="text-sm opacity-50 mb-8">记录技术探索中的思考、踩坑与解决方案</p>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* 主内容区 */}
+          <div className="lg:col-span-3">
+            <h1 className="text-2xl font-semibold mb-2">技术文章</h1>
+            <p className="text-sm opacity-50 mb-8">记录技术探索中的思考、踩坑与解决方案</p>
 
-        {/* 精选文章 */}
-        {featured.length > 0 && (
-          <div className="mb-10">
-            <h2 className="text-sm font-medium mb-4 flex items-center gap-2 opacity-70">
-              <BookOpen size={16} className="opacity-50" />
-              精选文章
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {featured.map(article => (
-                <ArticleCard key={article.id} article={article} onClick={() => navigate(`/articles/${article.id}`)} />
+            {/* 精选文章 */}
+            {featured.length > 0 && !tagFilter && (
+              <div className="mb-10">
+                <h2 className="text-sm font-medium mb-4 flex items-center gap-2 opacity-70">
+                  <BookOpen size={16} className="opacity-50" />
+                  精选文章
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {featured.map(article => (
+                    <ArticleCard key={article.id} article={article} onClick={() => navigate(`/articles/${article.id}`)} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 分类筛选 */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {allCategories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`px-3 py-1.5 text-xs rounded-full border transition-all duration-300 ${
+                    filter === cat
+                      ? 'bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 border-transparent'
+                      : 'border-stone-200 dark:border-stone-700 opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  {cat}
+                </button>
               ))}
             </div>
+
+            {/* 标签筛选提示 */}
+            {tagFilter && (
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-sm opacity-60">标签筛选:</span>
+                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/30">
+                  {tagFilter}
+                </span>
+                <button
+                  onClick={() => setTagFilter(null)}
+                  className="text-xs opacity-40 hover:opacity-100 transition-opacity"
+                >
+                  清除
+                </button>
+              </div>
+            )}
+
+            {/* 文章列表 */}
+            <div className="space-y-4">
+              {filtered.map(article => (
+                <ArticleListItem key={article.id} article={article} onClick={() => navigate(`/articles/${article.id}`)} />
+              ))}
+              {filtered.length === 0 && (
+                <div className="text-center py-10 opacity-40 text-sm">没有找到匹配的文章</div>
+              )}
+            </div>
           </div>
-        )}
 
-        {/* 分类筛选 */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {allCategories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-3 py-1.5 text-xs rounded-full border transition-all duration-300 ${
-                filter === cat
-                  ? 'bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 border-transparent'
-                  : 'border-stone-200 dark:border-stone-700 opacity-60 hover:opacity-100'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+          {/* 侧边栏 */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6">
+              {/* 标签云 */}
+              <div className="p-5 rounded-2xl border border-stone-200/40 dark:border-stone-700/40 bg-stone-50 dark:bg-stone-800/40">
+                <h3 className="text-sm font-medium mb-4 opacity-70">热门标签</h3>
+                <TagCloud onTagClick={setTagFilter} activeTag={tagFilter} />
+              </div>
 
-        {/* 文章列表 */}
-        <div className="space-y-4">
-          {filtered.map(article => (
-            <ArticleListItem key={article.id} article={article} onClick={() => navigate(`/articles/${article.id}`)} />
-          ))}
+              {/* 统计 */}
+              <div className="p-5 rounded-2xl border border-stone-200/40 dark:border-stone-700/40 bg-stone-50 dark:bg-stone-800/40">
+                <h3 className="text-sm font-medium mb-3 opacity-70">文章统计</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="opacity-50">总文章</span>
+                    <span className="font-medium">{articles?.length || 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="opacity-50">分类</span>
+                    <span className="font-medium">{allCategories.length - 1}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="opacity-50">精选</span>
+                    <span className="font-medium">{featured.length}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
