@@ -110,18 +110,20 @@ export default function HomePage() {
       </div>
 
       {/* ====== 下方分区块 ====== */}
-      <div className="bg-white dark:bg-stone-900">
-        <div className="max-w-5xl mx-auto px-6 py-20 space-y-20">
+      <div className="relative">
+        <BgSwitcher />
+        <div className="absolute inset-0 bg-black/10 dark:bg-black/20 pointer-events-none" />
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 space-y-20">
 
           {/* 精选作品 */}
           {featuredWorks.length > 0 && (
-            <section>
+            <section className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-2xl font-semibold mb-1">精选作品</h2>
-                  <p className="text-sm opacity-50">独立或团队完成的项目</p>
+                  <h2 className="text-xl font-semibold text-white mb-1">精选作品</h2>
+                  <p className="text-sm text-white/50">独立或团队完成的项目</p>
                 </div>
-                <Link to="/works" className="text-sm opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1">
+                <Link to="/works" className="text-sm text-white/60 hover:text-white transition-opacity flex items-center gap-1">
                   查看全部 <ArrowRight size={14} />
                 </Link>
               </div>
@@ -130,14 +132,14 @@ export default function HomePage() {
                   <Link
                     key={work.id}
                     to={`/works/${work.id}`}
-                    className="group rounded-2xl overflow-hidden border border-stone-200/40 dark:border-stone-700/40 bg-stone-50 dark:bg-stone-800/40 hover:shadow-lg transition-all duration-400"
+                    className="group rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-400"
                   >
                     <div className="aspect-[3/2] overflow-hidden">
                       <img src={work.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     </div>
                     <div className="p-5">
-                      <h3 className="font-medium mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{work.title}</h3>
-                      <p className="text-xs opacity-50 line-clamp-2">{work.description}</p>
+                      <h3 className="font-medium mb-1 text-white/90 group-hover:text-emerald-400 transition-colors">{work.title}</h3>
+                      <p className="text-xs text-white/50 line-clamp-2">{work.description}</p>
                     </div>
                   </Link>
                 ))}
@@ -146,18 +148,18 @@ export default function HomePage() {
           )}
 
           {/* 核心技能 + 标签云 */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div>
-              <h2 className="text-2xl font-semibold mb-1">核心技能</h2>
-              <p className="text-sm opacity-50 mb-6">技术能力分布</p>
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
+              <h2 className="text-xl font-semibold text-white mb-1">核心技能</h2>
+              <p className="text-sm text-white/50 mb-6">技术能力分布</p>
               <div className="flex flex-wrap gap-2">
                 {topSkills.map(skill => (
                   <span
                     key={skill.name}
                     className={`inline-block rounded-full font-medium transition-transform hover:scale-105 cursor-default ${
                       skill.level >= 5
-                        ? 'text-sm px-4 py-2 bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800'
-                        : 'text-xs px-3 py-1.5 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
+                        ? 'text-sm px-4 py-2 bg-white/20 text-white'
+                        : 'text-xs px-3 py-1.5 bg-white/10 text-white/70'
                     }`}
                   >
                     {skill.name}
@@ -165,22 +167,22 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-semibold mb-1">技术标签</h2>
-              <p className="text-sm opacity-50 mb-6">按主题筛选内容</p>
+            <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
+              <h2 className="text-xl font-semibold text-white mb-1">技术标签</h2>
+              <p className="text-sm text-white/50 mb-6">按主题筛选内容</p>
               <TagCloud />
             </div>
           </section>
 
           {/* 精选文章 */}
           {featuredArticles.length > 0 && (
-            <section>
+            <section className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-2xl font-semibold mb-1">技术文章</h2>
-                  <p className="text-sm opacity-50">思考、踩坑与解决方案</p>
+                  <h2 className="text-xl font-semibold text-white mb-1">技术文章</h2>
+                  <p className="text-sm text-white/50">思考、踩坑与解决方案</p>
                 </div>
-                <Link to="/articles" className="text-sm opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1">
+                <Link to="/articles" className="text-sm text-white/60 hover:text-white transition-opacity flex items-center gap-1">
                   查看全部 <ArrowRight size={14} />
                 </Link>
               </div>
@@ -189,18 +191,18 @@ export default function HomePage() {
                   <Link
                     key={article.id}
                     to={`/articles/${article.id}`}
-                    className="group p-5 rounded-2xl border border-stone-200/40 dark:border-stone-700/40 bg-stone-50 dark:bg-stone-800/40 hover:shadow-md transition-all"
+                    className="group p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all"
                   >
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/30">
+                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-50/20 text-emerald-400 border border-emerald-500/30">
                         {article.category}
                       </span>
-                      <span className="text-[10px] opacity-40">{article.readTime}</span>
+                      <span className="text-[10px] text-white/40">{article.readTime}</span>
                     </div>
-                    <h3 className="font-medium text-sm mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                    <h3 className="font-medium text-sm mb-2 text-white/90 group-hover:text-emerald-400 transition-colors line-clamp-2">
                       {article.title}
                     </h3>
-                    <p className="text-xs opacity-50 line-clamp-2">{article.summary}</p>
+                    <p className="text-xs text-white/50 line-clamp-2">{article.summary}</p>
                   </Link>
                 ))}
               </div>
