@@ -5,7 +5,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
 import ThemeMenu from './components/ThemeMenu'
-import TerminalWidget from './components/TerminalWidget'
+
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import WorksPage from './pages/WorksPage'
@@ -47,7 +47,6 @@ function App() {
       <Footer />
       <ThemeMenu dark={dark} toggleDark={toggleDark} />
       <BackToTop />
-      <TerminalWidget />
     </div>
   )
 }
