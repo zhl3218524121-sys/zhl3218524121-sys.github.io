@@ -1,0 +1,126 @@
+[
+  {
+    "id": 1,
+    "title": "智能控制系统设计与底层驱动实现",
+    "description": "基于微控制器平台，设计并实现了多态硬件控制系统。负责系统底层逻辑的构建，通过精密配置定时器资源实现平滑的物理信号输出。",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop",
+    "tags": ["C语言", "微控制器", "PWM", "嵌入式"],
+    "techCategories": [
+      {
+        "category": "控制系统与仿真",
+        "items": ["闭环控制", "PID 调参", "MATLAB / Simulink", "动力学建模", "状态空间分析"]
+      },
+      {
+        "category": "嵌入式系统开发",
+        "items": ["STM32", "ARM Cortex-M", "PWM 驱动", "ADC / DAC", "CAN 总线", "FreeRTOS"]
+      },
+      {
+        "category": "编程语言",
+        "items": ["C / C++", "Python", "MATLAB", "Assembly"]
+      }
+    ],
+    "detail": {
+      "background": "面向六自由度机械臂的伺服控制系统，需实现高精度位置闭环与力矩补偿。",
+      "role": "独立负责底层驱动开发 + 控制算法部署，从硬件选型到软件联调全链路。",
+      "techStack": {
+        "chip": "STM32F407",
+        "protocol": "CAN 总线 + 自定义指令帧",
+        "algorithm": "串级 PID + 前馈补偿",
+        "driver": "PWM 互补输出 + 死区插入"
+      },
+      "challenges": [
+        { "problem": "电机低速抖动", "solution": "加入速度观测器 + 滤波" },
+        { "problem": "中断时序冲突", "solution": "DMA 双缓冲 + 优先级分组" }
+      ],
+      "results": "位置跟踪误差 < 0.05°，系统响应延迟 < 2ms",
+      "links": {
+        "demo": "#",
+        "source": "#",
+        "video": ""
+      }
+    },
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "复杂动力学系统建模与数据分析",
+    "description": "利用专业数学工具对动态系统进行闭环反馈建模与数值分析。建立了高精度的系统响应模型，通过仿真实验验证了控制参数对稳态误差的影响。",
+    "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop",
+    "tags": ["系统建模", "数值分析", "闭环控制", "MATLAB"],
+    "techCategories": [
+      {
+        "category": "控制系统与仿真",
+        "items": ["动力学建模", "状态空间分析", "闭环控制", "MATLAB / Simulink"]
+      },
+      {
+        "category": "编程语言",
+        "items": ["MATLAB", "Python", "C / C++"]
+      },
+      {
+        "category": "数据分析",
+        "items": ["Python pandas", "matplotlib 可视化", "数值积分", "矩阵运算"]
+      }
+    ],
+    "detail": {
+      "background": "某多关节机器人逆运动学求解与轨迹优化问题。",
+      "role": "负责系统建模、数值仿真与实验数据对比验证。",
+      "techStack": {
+        "tool": "MATLAB + Simulink / Simscape",
+        "algorithm": "Newton-Raphson 迭代 + 龙格库塔积分",
+        "analysis": "Python pandas + matplotlib 可视化"
+      },
+      "challenges": [
+        { "problem": "奇异点规避", "solution": "阻尼最小二乘法 + 关节限位约束" },
+        { "problem": "实时性不足", "solution": "C 语言重写核心矩阵运算，MEX 编译加速" }
+      ],
+      "results": "仿真与实物误差 < 3%，计算周期从 50ms 降至 8ms",
+      "links": {
+        "demo": "#",
+        "source": "#",
+        "video": ""
+      }
+    },
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "高性能网络通讯环境构建与协议调优",
+    "description": "针对远端服务器进行系统级性能加固与通讯链路优化。重构了网络传输层的安全协议配置，通过部署先进的拥塞控制方案有效解决了高丢包环境下的带宽瓶颈问题。",
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop",
+    "tags": ["网络协议", "拥塞控制", "服务器运维", "系统优化"],
+    "techCategories": [
+      {
+        "category": "网络与系统优化",
+        "items": ["TCP/IP 协议栈", "拥塞控制算法", "Linux 服务器运维", "Docker", "系统性能调优"]
+      },
+      {
+        "category": "编程语言",
+        "items": ["C / C++", "Python", "Shell"]
+      },
+      {
+        "category": "部署环境",
+        "items": ["Ubuntu Server", "Docker 容器化", "Nginx", "Redis"]
+      }
+    ],
+    "detail": {
+      "background": "实验室多设备分布式数据采集系统，需低延迟高吞吐传输。",
+      "role": "负责网络架构设计、协议选型与拥塞控制策略优化。",
+      "techStack": {
+        "transport": "UDP + 自定义可靠传输协议",
+        "deploy": "Ubuntu Server + Docker 容器化",
+        "tuning": "内核参数调优 / 网卡中断亲和性 / DPDK"
+      },
+      "challenges": [
+        { "problem": "高并发丢包", "solution": "滑动窗口 + 自适应重传 + 流量整形" },
+        { "problem": "延迟抖动", "solution": "RTT 动态估计 + 发送 pacing" }
+      ],
+      "results": "吞吐提升至 950Mbps，99th 延迟从 45ms 降至 12ms",
+      "links": {
+        "demo": "#",
+        "source": "#",
+        "video": ""
+      }
+    },
+    "featured": true
+  }
+]
