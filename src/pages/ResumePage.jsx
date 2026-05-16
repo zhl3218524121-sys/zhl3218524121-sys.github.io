@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Download, Mail, MapPin, Globe, AlertCircle } from 'lucide-react'
+import { Download, Mail, MapPin, Globe, AlertCircle, Rocket, GraduationCap, Briefcase, Target } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
 
 export default function ResumePage() {
@@ -11,6 +11,7 @@ export default function ResumePage() {
 
   const workItems = timeline?.filter(t => t.type === 'work') || []
   const eduItems = timeline?.filter(t => t.type === 'education') || []
+  const projectItems = timeline?.filter(t => t.type === 'project') || []
 
   const resumeUrl = site?.resumePdf
   const hasResume = resumeUrl && resumeUrl !== '#' && resumeUrl !== ''
@@ -80,14 +81,20 @@ export default function ResumePage() {
 
           {/* 关于 */}
           <section className="mb-10">
-            <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4">关于</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+              <Rocket size={14} />
+              职业素览
+            </h3>
             <p className="text-sm leading-relaxed opacity-70">{site?.bio}</p>
           </section>
 
           {/* 工作经历 */}
           {workItems.length > 0 && (
             <section className="mb-10">
-              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4">工作经历</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+                <Briefcase size={14} />
+                工作经历
+              </h3>
               <div className="space-y-6">
                 {workItems.map(item => (
                   <div key={item.id}>
@@ -106,7 +113,10 @@ export default function ResumePage() {
           {/* 教育经历 */}
           {eduItems.length > 0 && (
             <section className="mb-10">
-              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4">教育背景</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+                <GraduationCap size={14} />
+                教育背景
+              </h3>
               <div className="space-y-6">
                 {eduItems.map(item => (
                   <div key={item.id}>
@@ -122,10 +132,35 @@ export default function ResumePage() {
             </section>
           )}
 
+          {/* 项目实践 */}
+          {projectItems.length > 0 && (
+            <section className="mb-10">
+              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+                <Briefcase size={14} />
+                项目实践经历
+              </h3>
+              <div className="space-y-6">
+                {projectItems.map(item => (
+                  <div key={item.id}>
+                    <div className="flex items-baseline justify-between mb-1">
+                      <div className="font-medium text-sm">{item.title}</div>
+                      <div className="text-xs opacity-40">{item.year || item.date}</div>
+                    </div>
+                    <div className="text-xs opacity-50 mb-1.5">{item.organization}</div>
+                    <p className="text-sm opacity-60 leading-relaxed">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* 技能 */}
           {skills && skills.length > 0 && (
-            <section>
-              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4">技能</h3>
+            <section className="mb-10">
+              <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+                <Target size={14} />
+                核心技能栈
+              </h3>
               {(() => {
                 const grouped = skills.reduce((acc, skill) => {
                   const cat = skill.category || '其他'
@@ -158,6 +193,24 @@ export default function ResumePage() {
               })()}
             </section>
           )}
+
+          {/* 综合素养 */}
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wider opacity-40 mb-4 flex items-center gap-2">
+              <Target size={14} />
+              综合素养
+            </h3>
+            <div className="space-y-3 text-sm opacity-70 leading-relaxed">
+              <p>
+                <span className="font-medium opacity-90">系统化自律：</span>
+                坚持长期的高强度体能训练与知识迭代，具备极强的心理韧性与任务执行力，习惯于在高压环境下保持清晰的决策逻辑。
+              </p>
+              <p>
+                <span className="font-medium opacity-90">职业愿景：</span>
+                短期致力于在机器人控制领域达成学术突破；长期目标是成为具备产研结合能力的工程专家，推动前沿技术向现实生产力转化。
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </div>

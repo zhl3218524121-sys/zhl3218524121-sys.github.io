@@ -85,3 +85,57 @@ html.dark body {
 html.dark .comment-slot {
   border-color: rgba(68, 64, 60, 0.5);
 }
+
+/* 文章 Markdown 渲染样式 */
+.article-content pre {
+  position: relative;
+}
+.article-content pre code[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0,0,0,0.06);
+  color: rgba(0,0,0,0.4);
+  border-bottom-left-radius: 8px;
+  border-top-right-radius: 10px;
+}
+html.dark .article-content pre code[data-lang]::before {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.35);
+}
+.article-content pre code[data-lang=""]::before {
+  display: none;
+}
+
+/* 表格样式补充 */
+.article-content table {
+  font-size: 13px;
+}
+.article-content table th,
+.article-content table td {
+  min-width: 80px;
+}
+
+/* 列表嵌套 */
+.article-content ul ul,
+.article-content ol ol,
+.article-content ul ol,
+.article-content ol ul {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  margin-left: 1rem;
+}
+
+/* 图片说明 */
+.article-content img + em {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.5;
+  margin-top: -0.5rem;
+}
