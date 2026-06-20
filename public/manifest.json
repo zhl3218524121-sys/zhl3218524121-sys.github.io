@@ -1,0 +1,23 @@
+{
+  "name": "章海林 | 个人品牌网站",
+  "short_name": "Zhang Hailin",
+  "description": "控制科学与工程 / 机器人学 / 嵌入式系统研发。章海林的个人品牌网站与作品集。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafaf9",
+  "theme_color": "#1c1917",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}
