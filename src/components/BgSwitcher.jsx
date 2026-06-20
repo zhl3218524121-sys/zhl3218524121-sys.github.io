@@ -17,22 +17,39 @@ export default function BgSwitcher() {
     switchTo((index + 1) % images.length)
   }, [images.length, index, switchTo])
 
-  // 自动轮播
+  // 自动轮播：多张图片才启用
   useEffect(() => {
     if (images.length <= 1) return
     const t = setInterval(next, interval)
     return () => clearInterval(t)
   }, [images.length, interval, next])
 
-  // 监听手动切换事件（仅通过设置菜单触发）
+  // 监听手动切换事件：多张图片才注册
   useEffect(() => {
+    if (images.length <= 1) return
     const handler = () => next()
     window.addEventListener('bg-switch', handler)
     return () => window.removeEventListener('bg-switch', handler)
-  }, [next])
+  }, [next, images.length])
 
   if (images.length === 0) return null
 
+  // 单张图片：直接渲染，不叠加、不轮播、无过渡动画
+  if (images.length === 1) {
+    return (
+      <div className="fixed inset-0 -z-10">
+        <img
+          src={images[0]}
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ filter: 'brightness(0.85)' }}
+        />
+        <div className="absolute inset-0 bg-stone-900/30 dark:bg-stone-950/50" />
+      </div>
+    )
+  }
+
+  // 多张图片：叠加轮播 + 过渡动画
   return (
     <div className="fixed inset-0 -z-10">
       {images.map((src, i) => (
