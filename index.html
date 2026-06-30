@@ -5,6 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://zhl3218524121-sys.github.io/" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- 基础 SEO -->
@@ -27,9 +29,34 @@
     <meta name="twitter:description" content="控制科学与工程背景，专注嵌入式系统与机器人底层驱动开发。" />
     <meta name="twitter:image" content="https://zhl3218524121-sys.github.io/assets/avatar/avatar.jpg" />
     
+    <!-- Content-Security-Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://rersonl-website.firebaseapp.com https://identitytoolkit.googleapis.com; frame-src 'self'; object-src 'none'; base-uri 'self';">
+    
     <!-- 主题色 -->
     <meta name="theme-color" content="#1c1917" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+
+    <!-- JSON-LD 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "章海林",
+      "alternateName": "Zhang Hailin",
+      "description": "控制科学与工程 / 机器人学 / 嵌入式系统研发。擅长闭环控制、底层驱动开发与系统优化。",
+      "url": "https://zhl3218524121-sys.github.io/",
+      "image": "https://zhl3218524121-sys.github.io/assets/avatar/avatar.jpg",
+      "sameAs": [
+        "https://github.com/zhl3218524121-sys"
+      ],
+      "knowsAbout": ["控制科学与工程", "机器人学", "嵌入式系统", "STM32", "MATLAB", "C/C++"],
+      "jobTitle": "控制科学与工程 / 机器人学研发",
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "安徽大学"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -2,6 +2,17 @@ import { useState } from 'react'
 import { MessageSquare, Send, CheckCircle, LogOut, Lock } from 'lucide-react'
 import { useAdminAuth } from '../hooks/useAdminAuth'
 
+// 简单 HTML 转义：防止用户输入的脚本标签在评论中执行
+function escapeHtml(text) {
+  if (typeof text !== 'string') return text
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
 /**
  * 本地评论系统
  * 评论存储在 localStorage，需要管理员审核后才显示
@@ -68,10 +79,10 @@ export default function CommentSlot({ workId }) {
           {approvedComments.map(c => (
             <div key={c.id} className="rounded-xl bg-stone-50 dark:bg-stone-800/40 border border-stone-200/30 dark:border-stone-700/30 p-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium">{c.name}</span>
+                <span className="text-xs font-medium">{escapeHtml(c.name)}</span>
                 <span className="text-[10px] opacity-30">{new Date(c.date).toLocaleDateString('zh-CN')}</span>
               </div>
-              <p className="text-xs opacity-60 leading-relaxed">{c.content}</p>
+              <p className="text-xs opacity-60 leading-relaxed whitespace-pre-wrap">{escapeHtml(c.content)}</p>
             </div>
           ))}
         </div>
@@ -221,13 +232,13 @@ function CommentAdmin({ workId }) {
           {pending.map(c => (
             <div key={c.id} className="rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 p-2 mb-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-medium">{c.name}</span>
+                <span className="text-[10px] font-medium">{escapeHtml(c.name)}</span>
                 <div className="flex gap-1">
                   <button onClick={() => approve(c)} className="px-2 py-0.5 rounded bg-emerald-500 text-white text-[10px]">通过</button>
                   <button onClick={() => reject(c)} className="px-2 py-0.5 rounded bg-red-400 text-white text-[10px]">拒绝</button>
                 </div>
               </div>
-              <p className="text-[10px] opacity-60 mt-0.5">{c.content}</p>
+              <p className="text-[10px] opacity-60 mt-0.5 whitespace-pre-wrap">{escapeHtml(c.content)}</p>
             </div>
           ))}
         </div>
@@ -238,7 +249,7 @@ function CommentAdmin({ workId }) {
           <p className="opacity-40 mb-1">已通过 ({approved.length})</p>
           {approved.map(c => (
             <div key={c.id} className="flex items-center justify-between rounded-lg bg-stone-50 dark:bg-stone-800/30 p-2 mb-1">
-              <span className="text-[10px] opacity-60">{c.name}: {c.content.slice(0, 20)}...</span>
+              <span className="text-[10px] opacity-60">{escapeHtml(c.name)}: {escapeHtml(c.content.slice(0, 20))}...</span>
               <button onClick={() => deleteApproved(c)} className="text-[10px] text-red-400 hover:text-red-500">删除</button>
             </div>
           ))}

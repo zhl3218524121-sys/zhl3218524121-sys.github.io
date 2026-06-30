@@ -4,6 +4,16 @@ import { marked } from 'marked'
 import { useJsonData } from '../hooks/useJsonData'
 import CommentSlot from '../components/CommentSlot'
 
+// 轻量 HTML 净化：移除 script/style 标签和事件处理属性，防御深度防御
+function sanitizeHtml(html) {
+  if (typeof html !== 'string') return html
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript:/gi, 'nojavascript:')
+}
+
 // 配置 marked：启用 GitHub Flavored Markdown
 marked.setOptions({
   gfm: true,
@@ -110,8 +120,9 @@ export default function ArticleDetailPage() {
     )
   }
 
-  // 使用 marked 解析 Markdown 为 HTML
-  const htmlContent = marked.parse(article.content || '')
+  // 使用 marked 解析 Markdown 为 HTML，并做简单净化
+  const rawHtml = marked.parse(article.content || '')
+  const htmlContent = sanitizeHtml(rawHtml)
 
   return (
     <div className="pt-24 pb-20 px-6">
