@@ -8,7 +8,10 @@ export function useJsonData(path) {
   useEffect(() => {
     let cancelled = false
     fetch(path)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
       .then(d => { if (!cancelled) { setData(d); setLoading(false) } })
       .catch(e => { if (!cancelled) { setError(e); setLoading(false) } })
     return () => { cancelled = true }

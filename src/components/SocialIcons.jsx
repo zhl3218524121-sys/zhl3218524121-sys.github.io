@@ -1,6 +1,6 @@
 import { Github, Twitter, Mail } from 'lucide-react'
 
-export default function SocialIcons({ social }) {
+export default function SocialIcons({ social, className = '' }) {
   if (!social) return null
   const items = [
     { key: 'github', label: 'GitHub', icon: Github, url: social.github },
@@ -14,7 +14,7 @@ export default function SocialIcons({ social }) {
         <a
           key={item.key}
           href={item.url}
-          className="tooltip-top text-white/80 hover:text-white transition-colors duration-300"
+          className={`tooltip-top hover:text-emerald-500 transition-colors duration-300 ${className}`}
           aria-label={item.label}
           data-tip={item.label}
         >

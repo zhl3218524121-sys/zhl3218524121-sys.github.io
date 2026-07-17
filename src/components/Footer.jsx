@@ -51,7 +51,7 @@ export default function Footer() {
               )}
               <div className="flex items-center gap-2">
                 <MapPin size={14} />
-                中国
+                {site?.location || '中国'}
               </div>
               {social?.github && (
                 <a href={social.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-100 transition-opacity">

@@ -135,7 +135,7 @@ export default function HomePage() {
                     className="group rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-400"
                   >
                     <div className="aspect-[3/2] overflow-hidden">
-                      <img src={work.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                      <img src={work.image} alt={work.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     </div>
                     <div className="p-5">
                       <h3 className="font-medium mb-1 text-white/90 group-hover:text-emerald-400 transition-colors">{work.title}</h3>
