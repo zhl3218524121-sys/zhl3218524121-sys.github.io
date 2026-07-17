@@ -8,7 +8,8 @@
     "status": "",
     "avatar": "/assets/avatar/avatar.jpg",
     "resumePdf": "/assets/resume/resume.pdf",
-    "email": "3218524121@qq.com"
+    "email": "3218524121@qq.com",
+    "location": "中国"
   },
   "social": {
     "github": "https://github.com/zhl3218524121-sys",
