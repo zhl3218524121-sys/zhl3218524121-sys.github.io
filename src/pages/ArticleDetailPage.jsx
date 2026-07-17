@@ -70,7 +70,7 @@ const renderer = {
   },
 
   image({ href, text }) {
-    return `<img src="${href}" alt="${text || ''}" class="rounded-xl my-4 max-w-full border border-stone-200 dark:border-stone-700/30" loading="lazy" />`
+    return `<img src="${href}" alt="${text || ''}" class="rounded-xl my-4 max-w-full max-h-[600px] object-contain border border-stone-200 dark:border-stone-700/30" loading="lazy" />`
   },
 
   table({ header, rows }) {

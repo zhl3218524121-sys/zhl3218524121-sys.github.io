@@ -7,12 +7,20 @@ import CommentSlot from '../components/CommentSlot'
 export default function ProjectDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data: works } = useJsonData('/data/works.json')
-  const { data: architectures } = useJsonData('/data/architectures.json')
+  const { data: works, loading: worksLoading } = useJsonData('/data/works.json')
+  const { data: architectures, loading: archLoading } = useJsonData('/data/architectures.json')
 
   const work = works?.find(w => w.id === Number(id))
   const architecture = work ? architectures?.[work.id] : null
   const detail = work?.detail
+
+  if (worksLoading || archLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-stone-300 border-t-stone-800 rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   if (!work) {
     return (

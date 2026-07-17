@@ -6,10 +6,11 @@ import TagCloud from '../components/TagCloud'
 import { useJsonData } from '../hooks/useJsonData'
 
 export default function HomePage() {
-  const { data: config, loading: cLoading } = useJsonData('/data/config.json')
-  const { data: works } = useJsonData('/data/works.json')
-  const { data: skills } = useJsonData('/data/skills.json')
-  const { data: articles } = useJsonData('/data/articles.json')
+  const { data: config, loading: configLoading } = useJsonData('/data/config.json')
+  const { data: works, loading: worksLoading } = useJsonData('/data/works.json')
+  const { data: skills, loading: skillsLoading } = useJsonData('/data/skills.json')
+  const { data: articles, loading: articlesLoading } = useJsonData('/data/articles.json')
+  const isLoading = configLoading || worksLoading || skillsLoading || articlesLoading
   const site = config?.site
   const social = config?.social
 
@@ -23,7 +24,7 @@ export default function HomePage() {
     { label: '技能', value: skills?.length || 0, icon: BookOpen, path: '/skills' },
   ]
 
-  if (cLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-stone-300 border-t-stone-800 rounded-full animate-spin" />

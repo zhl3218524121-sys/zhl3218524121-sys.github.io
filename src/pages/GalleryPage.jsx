@@ -179,7 +179,7 @@ export default function GalleryPage() {
           {allPhotos.map(photo => (
             <div
               key={photo.id}
-              className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-stone-100 dark:bg-stone-800 cursor-pointer"
+              className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-stone-100 dark:bg-stone-800 cursor-pointer min-h-[180px]"
               onClick={() => setLightbox(photo)}
             >
               <img

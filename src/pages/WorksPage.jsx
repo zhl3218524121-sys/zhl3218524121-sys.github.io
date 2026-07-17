@@ -22,6 +22,7 @@ export default function WorksPage() {
     return works.filter(w => w.tags.includes(filter))
   }, [works, filter])
 
+
   return (
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-5xl mx-auto">
@@ -47,9 +48,11 @@ export default function WorksPage() {
 
         {/* 作品网格 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(work => (
-            <article
-              key={work.id}
+          {filtered.map(work => {
+            const demoUrl = work.detail?.links?.demo
+            const sourceUrl = work.detail?.links?.source
+            return (
+              <article key={work.id}
               className="group rounded-2xl overflow-hidden border border-stone-200/40 dark:border-stone-700/40 bg-white dark:bg-stone-800/40 hover:shadow-lg hover:shadow-stone-200/20 dark:hover:shadow-stone-900/30 transition-all duration-400"
             >
               <div
@@ -80,9 +83,9 @@ export default function WorksPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {work.demoUrl && work.demoUrl !== '#' && (
+                    {demoUrl && demoUrl !== '#' && (
                       <a
-                        href={work.demoUrl}
+                        href={demoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1 text-xs opacity-60 hover:opacity-100 transition-opacity"
@@ -91,9 +94,9 @@ export default function WorksPage() {
                         演示
                       </a>
                     )}
-                    {work.sourceUrl && work.sourceUrl !== '#' && (
+                    {sourceUrl && sourceUrl !== '#' && (
                       <a
-                        href={work.sourceUrl}
+                        href={sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1 text-xs opacity-60 hover:opacity-100 transition-opacity"
@@ -104,7 +107,7 @@ export default function WorksPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3">
-                    <ShareButtons url={work.demoUrl} title={work.title} />
+                    <ShareButtons url={demoUrl} title={work.title} />
                     <button
                       onClick={() => navigate(`/works/${work.id}`)}
                       className="inline-flex items-center gap-1 text-xs opacity-60 hover:opacity-100 transition-opacity"
@@ -116,7 +119,7 @@ export default function WorksPage() {
                 </div>
               </div>
             </article>
-          ))}
+          )})}
         </div>
       </div>
     </div>

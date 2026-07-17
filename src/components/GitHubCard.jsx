@@ -13,7 +13,7 @@ export default function GitHubCard({ username }) {
           <img
             src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=transparent&hide_border=true&title_color=currentColor&text_color=currentColor&icon_color=currentColor`}
             alt="GitHub Stats"
-            className="w-full sm:w-80"
+            className="w-full sm:w-80 aspect-[2/1] object-contain"
             loading="lazy"
           />
         </a>
@@ -26,7 +26,7 @@ export default function GitHubCard({ username }) {
           <img
             src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=transparent&hide_border=true&title_color=currentColor&text_color=currentColor`}
             alt="Top Languages"
-            className="w-full sm:w-64"
+            className="w-full sm:w-64 aspect-[2/1] object-contain"
             loading="lazy"
           />
         </a>
