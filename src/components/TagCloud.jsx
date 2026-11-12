@@ -29,7 +29,7 @@ export default function TagCloud({ onTagClick, activeTag }) {
     if (onTagClick) {
       onTagClick(tag)
     } else {
-      navigate(`/articles`)
+      navigate(`/tags/${encodeURIComponent(tag)}`)
     }
   }
 
@@ -38,7 +38,7 @@ export default function TagCloud({ onTagClick, activeTag }) {
   return (
     <div className="flex flex-wrap gap-2">
       {sortedTags.map(([tag, count]) => {
-        const size = 0.75 + (count / maxCount) * 0.5 // 0.75rem ~ 1.25rem
+        const size = 0.75 + (count / maxCount) * 0.5
         const opacity = 0.4 + (count / maxCount) * 0.6
         const isActive = activeTag === tag
 
@@ -51,9 +51,7 @@ export default function TagCloud({ onTagClick, activeTag }) {
                 ? 'bg-stone-800 dark:bg-stone-100 text-stone-100 dark:text-stone-800 border-transparent'
                 : 'border-white/30 bg-white/10 text-white/90 hover:bg-white/20 hover:border-white/40'
             }`}
-            style={{
-              fontSize: `${size}rem`,
-            }}
+            style={{ fontSize: `${size}rem` }}
           >
             {tag}
             <span className="ml-1 text-[10px] opacity-50">{count}</span>

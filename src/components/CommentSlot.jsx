@@ -16,7 +16,7 @@ function escapeHtml(text) {
 /**
  * 本地评论系统
  * 评论存储在 localStorage，需要管理员审核后才显示
- * 评论者提交后看到"评论已提交"，不知道需要审核
+ * 评论者提交后看到本地保存状态
  */
 export default function CommentSlot({ workId }) {
   const { user, isAdmin, login, logout, error } = useAdminAuth()
@@ -89,6 +89,7 @@ export default function CommentSlot({ workId }) {
       )}
 
       {/* 评论表单 */}
+      <p className="mb-3 text-xs text-stone-600 dark:text-stone-400">评论与审核记录仅保存在当前浏览器。</p>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="grid grid-cols-2 gap-2">
           <input
@@ -124,9 +125,9 @@ export default function CommentSlot({ workId }) {
             提交评论
           </button>
           {submitted && (
-            <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
+            <span role="status" className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
               <CheckCircle size={12} />
-              评论已提交
+              评论已保存到当前浏览器
             </span>
           )}
         </div>

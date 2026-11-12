@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>章海林的技术博客</title>
+    <link>https://zhl3218524121-sys.github.io/</link>
+    <atom:link href="https://zhl3218524121-sys.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <description>控制科学与工程 / 机器人学 / 嵌入式系统研发 — 技术探索、踩坑记录与解决方案</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 12 Nov 2026 05:50:06 GMT</lastBuildDate>
+  <item>
+    <title>STM32 中断优先级踩坑与解决方案</title>
+    <link>https://zhl3218524121-sys.github.io/#/articles/1</link>
+    <guid isPermaLink="true">https://zhl3218524121-sys.github.io/#/articles/1</guid>
+    <description>在开发多自由度机械臂控制器时，遇到 NVIC 中断优先级配置导致的时序冲突问题。本文记录从现象分析到根因定位的完整过程，以及最终的 DMA 双缓冲 + 优先级分组解决方案。</description>
+    <pubDate>Fri, 14 Mar 2025 16:00:00 GMT</pubDate>
+    <category>嵌入式开发</category>
+    <category>STM32</category>
+    <category>中断</category>
+    <category>NVIC</category>
+    <category>DMA</category>
+    <category>实时系统</category>
+  </item>
+  <item>
+    <title>串级 PID 调参实战：从理论到机械臂位置控制</title>
+    <link>https://zhl3218524121-sys.github.io/#/articles/2</link>
+    <guid isPermaLink="true">https://zhl3218524121-sys.github.io/#/articles/2</guid>
+    <description>PID 调参是控制工程的基本功，但面对多自由度机械臂的位置-速度-电流三环控制时，参数耦合让调参变得复杂。本文分享一套可复用的串级 PID 调参方法论。</description>
+    <pubDate>Thu, 27 Feb 2025 16:00:00 GMT</pubDate>
+    <category>控制算法</category>
+    <category>PID</category>
+    <category>串级控制</category>
+    <category>机械臂</category>
+    <category>调参</category>
+    <category>MATLAB</category>
+  </item>
+  <item>
+    <title>MATLAB 机械臂逆运动学推导：从 DH 参数到解析解</title>
+    <link>https://zhl3218524121-sys.github.io/#/articles/3</link>
+    <guid isPermaLink="true">https://zhl3218524121-sys.github.io/#/articles/3</guid>
+    <description>本文完整记录六自由度机械臂逆运动学求解过程，从 Denavit-Hartenberg 参数建立到解析法求解，包含完整的 MATLAB 代码和几何推导图解。</description>
+    <pubDate>Sun, 19 Jan 2025 16:00:00 GMT</pubDate>
+    <category>系统建模</category>
+    <category>MATLAB</category>
+    <category>逆运动学</category>
+    <category>DH参数</category>
+    <category>机械臂</category>
+    <category>数值分析</category>
+  </item>
+  <item>
+    <title>网络拥塞控制实验：从 Reno 到 BBR 的数据对比</title>
+    <link>https://zhl3218524121-sys.github.io/#/articles/4</link>
+    <guid isPermaLink="true">https://zhl3218524121-sys.github.io/#/articles/4</guid>
+    <description>在实验室多设备分布式采集系统中，高丢包环境下的 TCP 吞吐量急剧下降。本文对比测试了 Reno、Cubic、BBR 三种拥塞控制算法，记录完整实验数据与调优过程。</description>
+    <pubDate>Mon, 09 Dec 2024 16:00:00 GMT</pubDate>
+    <category>网络优化</category>
+    <category>TCP</category>
+    <category>拥塞控制</category>
+    <category>BBR</category>
+    <category>网络协议</category>
+    <category>性能测试</category>
+  </item>
+  <item>
+    <title>FreeRTOS 任务调度优化：从轮询到事件驱动</title>
+    <link>https://zhl3218524121-sys.github.io/#/articles/5</link>
+    <guid isPermaLink="true">https://zhl3218524121-sys.github.io/#/articles/5</guid>
+    <description>在资源受限的 STM32F4 平台上，将传统的轮询式任务架构重构为事件驱动模型，CPU 占用率从 78% 降至 32%，同时响应延迟降低 60%。</description>
+    <pubDate>Mon, 04 Nov 2024 16:00:00 GMT</pubDate>
+    <category>嵌入式开发</category>
+    <category>FreeRTOS</category>
+    <category>RTOS</category>
+    <category>任务调度</category>
+    <category>事件驱动</category>
+    <category>STM32</category>
+  </item>
+  </channel>
+</rss>

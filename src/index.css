@@ -26,7 +26,7 @@ html.dark body {
   }
 }
 
-/* 简单 tooltip */
+/* ============ tooltip ============ */
 .tooltip {
   position: relative;
 }
@@ -50,8 +50,6 @@ html.dark body {
   opacity: 1;
   transform: translateY(-50%) scale(1);
 }
-
-/* 上方 tooltip（用于横向排列的图标） */
 .tooltip-top {
   position: relative;
 }
@@ -76,7 +74,7 @@ html.dark body {
   transform: translateX(-50%) scale(1);
 }
 
-/* 评论预留区域样式 */
+/* ============ 评论区 ============ */
 .comment-slot {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
@@ -86,7 +84,7 @@ html.dark .comment-slot {
   border-color: rgba(68, 64, 60, 0.5);
 }
 
-/* 文章 Markdown 渲染样式 */
+/* ============ 文章代码块 ============ */
 .article-content pre {
   position: relative;
 }
@@ -112,16 +110,152 @@ html.dark .article-content pre code[data-lang]::before {
   display: none;
 }
 
-/* 表格样式补充 */
-.article-content table {
-  font-size: 13px;
+/* ============ Prism 语法高亮 — 浅色模式 ============ */
+.article-content code .token.comment,
+.article-content code .token.prolog,
+.article-content code .token.doctype,
+.article-content code .token.cdata {
+  color: #a8a29e;
+  font-style: italic;
 }
-.article-content table th,
-.article-content table td {
-  min-width: 80px;
+.article-content code .token.punctuation {
+  color: #78716c;
+}
+.article-content code .token.property,
+.article-content code .token.tag,
+.article-content code .token.constant,
+.article-content code .token.symbol,
+.article-content code .token.deleted {
+  color: #dc2626;
+}
+.article-content code .token.boolean,
+.article-content code .token.number {
+  color: #d97706;
+}
+.article-content code .token.selector,
+.article-content code .token.attr-name,
+.article-content code .token.string,
+.article-content code .token.char,
+.article-content code .token.builtin,
+.article-content code .token.inserted {
+  color: #059669;
+}
+.article-content code .token.operator,
+.article-content code .token.entity,
+.article-content code .token.url,
+.article-content code .token.variable {
+  color: #0891b2;
+}
+.article-content code .token.atrule,
+.article-content code .token.attr-value,
+.article-content code .token.function,
+.article-content code .token.class-name {
+  color: #7c3aed;
+}
+.article-content code .token.keyword {
+  color: #2563eb;
+  font-weight: 600;
+}
+.article-content code .token.regex,
+.article-content code .token.important {
+  color: #db2777;
 }
 
-/* 列表嵌套 */
+/* ============ Prism 语法高亮 — 深色模式 ============ */
+html.dark .article-content code .token.comment,
+html.dark .article-content code .token.prolog,
+html.dark .article-content code .token.doctype,
+html.dark .article-content code .token.cdata {
+  color: #57534e;
+}
+html.dark .article-content code .token.punctuation {
+  color: #a8a29e;
+}
+html.dark .article-content code .token.property,
+html.dark .article-content code .token.tag,
+html.dark .article-content code .token.constant,
+html.dark .article-content code .token.symbol,
+html.dark .article-content code .token.deleted {
+  color: #f87171;
+}
+html.dark .article-content code .token.boolean,
+html.dark .article-content code .token.number {
+  color: #fbbf24;
+}
+html.dark .article-content code .token.selector,
+html.dark .article-content code .token.attr-name,
+html.dark .article-content code .token.string,
+html.dark .article-content code .token.char,
+html.dark .article-content code .token.builtin,
+html.dark .article-content code .token.inserted {
+  color: #34d399;
+}
+html.dark .article-content code .token.operator,
+html.dark .article-content code .token.entity,
+html.dark .article-content code .token.url,
+html.dark .article-content code .token.variable {
+  color: #22d3ee;
+}
+html.dark .article-content code .token.atrule,
+html.dark .article-content code .token.attr-value,
+html.dark .article-content code .token.function,
+html.dark .article-content code .token.class-name {
+  color: #a78bfa;
+}
+html.dark .article-content code .token.keyword {
+  color: #60a5fa;
+}
+html.dark .article-content code .token.regex,
+html.dark .article-content code .token.important {
+  color: #f472b6;
+}
+
+/* ============ 代码复制按钮 ============ */
+.article-content pre .copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.45);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+.article-content pre:hover .copy-btn { opacity: 1; }
+.article-content pre .copy-btn:hover {
+  background: rgba(0,0,0,0.15);
+  color: rgba(0,0,0,0.7);
+}
+.article-content pre .copy-btn.copied {
+  background: rgba(16,185,129,0.15);
+  color: #059669;
+  opacity: 1;
+}
+html.dark .article-content pre .copy-btn {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45);
+}
+html.dark .article-content pre .copy-btn:hover {
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+}
+html.dark .article-content pre .copy-btn.copied {
+  background: rgba(16,185,129,0.2);
+  color: #34d399;
+}
+
+/* ============ 表格 ============ */
+.article-content table { font-size: 13px; }
+.article-content table th,
+.article-content table td { min-width: 80px; }
 .article-content ul ul,
 .article-content ol ol,
 .article-content ul ol,
@@ -131,11 +265,81 @@ html.dark .article-content pre code[data-lang]::before {
   margin-left: 1rem;
 }
 
-/* 图片说明 */
+/* ============ 图片说明 ============ */
 .article-content img + em {
   display: block;
   text-align: center;
   font-size: 12px;
   opacity: 0.5;
   margin-top: -0.5rem;
+}
+
+/* ============ KaTeX 公式 ============ */
+.article-content .katex-display {
+  margin: 1.25rem 0;
+  padding: 1rem 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.article-content .katex {
+  font-size: 1.05em;
+}
+.article-content h1, .article-content h2, .article-content h3, .article-content h4 {
+  scroll-margin-top: 80px;
+}
+
+/* ============ Mermaid 图表 ============ */
+.mermaid-wrapper {
+  padding: 1rem;
+  background: #fafaf9;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(231,229,228,0.6);
+}
+html.dark .mermaid-wrapper {
+  background: rgba(28,25,23,0.5);
+  border-color: rgba(68,64,60,0.5);
+}
+.mermaid {
+  display: flex;
+  justify-content: center;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ============ 滚动入场动画 ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ 打印样式（简历页） ============ */
+@media print {
+  nav, footer, .no-print, button, .back-to-top,
+  .fixed, [class*="fixed"] {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .print-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .print-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
 }

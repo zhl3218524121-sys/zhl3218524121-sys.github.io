@@ -18,8 +18,10 @@ const footerLinks = [
   {
     title: '更多',
     links: [
+      { label: 'Now', path: '/now' },
       { label: '灵感板', path: '/gallery' },
       { label: '书架', path: '/books' },
+      { label: '友链', path: '/friends' },
       { label: '联系我', path: '/contact' },
     ],
   },
@@ -82,11 +84,22 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* 底部栏 */}
+        {/* 底部栏：版权 + 访问统计 + 社交图标 */}
         <div className="pt-8 border-t border-stone-200/30 dark:border-stone-700/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs opacity-40">
             © {new Date().getFullYear()} {site?.name || 'Zhang Hailin'}. All rights reserved.
           </div>
+
+          {/* 不蒜子站点统计 */}
+          <div className="flex items-center gap-4 text-xs opacity-40">
+            <span id="busuanzi_container_site_uv" className="flex items-center gap-1">
+              访客 <span id="busuanzi_value_site_uv">0</span>
+            </span>
+            <span id="busuanzi_container_site_pv" className="flex items-center gap-1">
+              总访问 <span id="busuanzi_value_site_pv">0</span>
+            </span>
+          </div>
+
           <SocialIcons social={social} />
         </div>
       </div>

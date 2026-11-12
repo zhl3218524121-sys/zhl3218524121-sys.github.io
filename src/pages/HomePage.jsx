@@ -3,6 +3,8 @@ import { ArrowRight, Briefcase, Download, FileText, Wrench, BookOpen } from 'luc
 import BgSwitcher from '../components/BgSwitcher'
 import SocialIcons from '../components/SocialIcons'
 import TagCloud from '../components/TagCloud'
+import CountUp from '../components/CountUp'
+import { Reveal } from '../hooks/useReveal'
 import { useJsonData } from '../hooks/useJsonData'
 
 export default function HomePage() {
@@ -37,7 +39,7 @@ export default function HomePage() {
       {/* ====== HERO 首屏 ====== */}
       <div className="relative min-h-screen overflow-hidden">
         <BgSwitcher />
-        <div className="absolute inset-0 bg-black/20 dark:bg-black/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/45 dark:bg-black/50 pointer-events-none" />
 
         {/* 装饰方块 */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -51,7 +53,7 @@ export default function HomePage() {
           <div className="absolute top-[62%] right-[22%] w-20 h-20 bg-white/5 rounded-2xl" />
         </div>
 
-        <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
+        <div className="relative z-10 min-h-screen flex items-center justify-center px-6 pt-20 pb-16">
           <div className="text-center max-w-2xl">
             {/* 头像 */}
             <div className="relative mx-auto mb-6 w-28 h-28">
@@ -64,8 +66,12 @@ export default function HomePage() {
 
             {/* 名字 */}
             <h1 className="text-4xl font-bold text-white mb-3">{site?.name || '章海林'}</h1>
-            <p className="text-lg text-white/70 mb-2">{site?.tagline || '控制科学与工程 / 机器人学 / 嵌入式系统研发'}</p>
-            <p className="text-sm text-white/50 mb-8 max-w-md mx-auto leading-relaxed">{site?.bio?.slice(0, 80)}...</p>
+            <p className="text-lg text-white/95 mb-2">{site?.tagline || '控制科学与工程 / 机器人学 / 嵌入式系统研发'}</p>
+            {site?.bio && (
+              <p className="text-sm text-white/90 mb-8 max-w-md mx-auto leading-relaxed">
+                {site.bio.length > 80 ? site.bio.slice(0, 80) + '…' : site.bio}
+              </p>
+            )}
 
             {/* 核心数据 */}
             <div className="flex items-center justify-center gap-6 mb-8">
@@ -75,8 +81,10 @@ export default function HomePage() {
                   to={stat.path}
                   className="text-center group"
                 >
-                  <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">{stat.value}</div>
-                  <div className="text-xs text-white/50 flex items-center gap-1 justify-center">
+                  <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    <CountUp end={stat.value} duration={1200} />
+                  </div>
+                  <div className="text-xs text-white/90 flex items-center gap-1 justify-center">
                     <stat.icon size={12} />
                     {stat.label}
                   </div>
@@ -104,7 +112,7 @@ export default function HomePage() {
 
             {/* 社交链接 */}
             <div className="flex justify-center">
-              <SocialIcons social={social} />
+              <SocialIcons social={social} className="text-white" />
             </div>
           </div>
         </div>
@@ -118,6 +126,7 @@ export default function HomePage() {
 
           {/* 精选作品 */}
           {featuredWorks.length > 0 && (
+            <Reveal>
             <section className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-8">
                 <div>
@@ -146,9 +155,11 @@ export default function HomePage() {
                 ))}
               </div>
             </section>
+            </Reveal>
           )}
 
           {/* 核心技能 + 标签云 */}
+          <Reveal>
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <h2 className="text-xl font-semibold text-white mb-1">核心技能</h2>
@@ -174,9 +185,11 @@ export default function HomePage() {
               <TagCloud />
             </div>
           </section>
+          </Reveal>
 
           {/* 精选文章 */}
           {featuredArticles.length > 0 && (
+            <Reveal>
             <section className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/15 p-10">
               <div className="flex items-center justify-between mb-8">
                 <div>
@@ -208,6 +221,7 @@ export default function HomePage() {
                 ))}
               </div>
             </section>
+            </Reveal>
           )}
 
         </div>

@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, GraduationCap, Wrench, FileText, ArrowRight } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
+import GitHubCard from '../components/GitHubCard'
+import { Reveal } from '../hooks/useReveal'
 
 function TimelineItem({ item }) {
   const [expanded, setExpanded] = useState(false)
@@ -30,34 +32,21 @@ function TimelineItem({ item }) {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="text-xs opacity-40">{item.date || item.year}</span>
-              <ChevronDown
-                size={14}
-                className={`opacity-40 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
-              />
+              <ChevronDown size={14} className={`opacity-40 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`} />
             </div>
           </div>
-          <div
-            className={`overflow-hidden transition-all duration-300 ${
-              expanded ? 'max-h-60 opacity-100 mt-2' : 'max-h-0 opacity-0'
-            }`}
-          >
+          <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-60 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
             <p className="text-sm opacity-60 leading-relaxed mb-2">{item.description}</p>
             {item.tags && item.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-2">
                 {item.tags.slice(0, 4).map(tag => (
-                  <span key={tag} className="px-2 py-0.5 text-[10px] rounded-md bg-stone-100 dark:bg-stone-800/50 opacity-60">
-                    {tag}
-                  </span>
+                  <span key={tag} className="px-2 py-0.5 text-[10px] rounded-md bg-stone-100 dark:bg-stone-800/50 opacity-60">{tag}</span>
                 ))}
               </div>
             )}
             {hasLink && (
-              <Link
-                to={item.link}
-                className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline"
-              >
-                {item.linkLabel}
-                <ArrowRight size={10} />
+              <Link to={item.link} className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline">
+                {item.linkLabel} <ArrowRight size={10} />
               </Link>
             )}
           </div>
@@ -73,23 +62,18 @@ export default function AboutPage() {
   const { data: works } = useJsonData('/data/works.json')
   const { data: articles } = useJsonData('/data/articles.json')
   const bio = config?.site?.bio
+  const githubUsername = config?.services?.githubUsername
 
-  // 合并时间线：手动条目 + 作品 + 文章
   const mergedTimeline = useMemo(() => {
     const items = []
-
-    // 手动经历条目
     if (timeline) {
       items.push(...timeline.filter(t => t.date || t.year || t.type === 'open'))
     }
-
-    // 作品同步
     if (works) {
       works.forEach(work => {
         items.push({
           id: `work-${work.id}`,
-          date: '',
-          year: '',
+          date: '', year: '',
           title: work.title,
           organization: '项目作品',
           description: work.description,
@@ -100,8 +84,6 @@ export default function AboutPage() {
         })
       })
     }
-
-    // 文章同步
     if (articles) {
       articles.forEach(article => {
         items.push({
@@ -118,7 +100,6 @@ export default function AboutPage() {
         })
       })
     }
-
     return items
   }, [timeline, works, articles])
 
@@ -128,17 +109,24 @@ export default function AboutPage() {
         <h1 className="text-2xl font-semibold mb-8">关于我</h1>
 
         {bio && (
-          <p className="text-base leading-relaxed opacity-70 mb-12">
-            {bio}
-          </p>
+          <p className="text-base leading-relaxed opacity-70 mb-12">{bio}</p>
         )}
 
         <h2 className="text-sm font-medium opacity-40 uppercase tracking-wider mb-4">经历</h2>
-        <div className="space-y-1">
+        <div className="space-y-1 mb-16">
           {mergedTimeline?.map(item => (
             <TimelineItem key={item.id} item={item} />
           ))}
         </div>
+
+        {/* GitHub 卡片 */}
+        {githubUsername && (
+          <Reveal>
+            <div className="pt-8 border-t border-stone-200/30 dark:border-stone-700/30">
+              <GitHubCard username={githubUsername} />
+            </div>
+          </Reveal>
+        )}
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ExternalLink, Github, Play, Wrench, Target, Award, AlertTriangle, Lightbulb, Layers } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Github, Play, Wrench, Target, Award, AlertTriangle, Lightbulb, Layers, ZoomIn, X } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
 import { TechCategory } from '../components/TechTag'
 import CommentSlot from '../components/CommentSlot'
@@ -7,6 +8,7 @@ import CommentSlot from '../components/CommentSlot'
 export default function ProjectDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const { data: works, loading: worksLoading } = useJsonData('/data/works.json')
   const { data: architectures, loading: archLoading } = useJsonData('/data/architectures.json')
 
@@ -37,6 +39,8 @@ export default function ProjectDetailPage() {
       </div>
     )
   }
+
+  const archImageUrl = `/assets/architectures/${work.id}.svg`
 
   return (
     <div className="pt-24 pb-20 px-6">
@@ -70,13 +74,22 @@ export default function ProjectDetailPage() {
               <Layers size={16} className="opacity-50" />
               系统架构
             </h2>
-            <div className="w-full rounded-2xl overflow-hidden border border-stone-200/30 dark:border-stone-700/30 bg-white dark:bg-stone-900/50">
+            <div
+              className="relative w-full rounded-2xl overflow-hidden border border-stone-200/30 dark:border-stone-700/30 bg-white dark:bg-stone-900/50 cursor-zoom-in group"
+              onClick={() => setLightboxOpen(true)}
+            >
               <img
-                src={`/assets/architectures/${work.id}.svg`}
+                src={archImageUrl}
                 alt={architecture.title}
-                className="w-full h-auto"
+                className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 loading="lazy"
               />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <div className="bg-black/60 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                  <ZoomIn size={12} />
+                  点击放大
+                </div>
+              </div>
             </div>
             <p className="text-xs opacity-40 mt-2 text-center">{architecture.description}</p>
           </div>
@@ -223,6 +236,27 @@ export default function ProjectDetailPage() {
           <CommentSlot workId={work.id} />
         </div>
       </div>
+
+      {/* 架构图灯箱 */}
+      {lightboxOpen && architecture && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+            onClick={() => setLightboxOpen(false)}
+          >
+            <X size={20} />
+          </button>
+          <img
+            src={archImageUrl}
+            alt={architecture.title}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Send, CheckCircle, AlertCircle, Mail, MapPin, Github, Bell } from 'lucide-react'
 import { useJsonData } from '../hooks/useJsonData'
+import SubscribeBar from '../components/SubscribeBar'
 
 export default function ContactPage() {
   const { data: config } = useJsonData('/data/config.json')
@@ -8,96 +9,44 @@ export default function ContactPage() {
   const site = config?.site
   const social = config?.social
   const web3formsKey = services?.web3formsKey
+  const canSend = Boolean(web3formsKey && !web3formsKey.includes('YOUR_'))
 
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
-  const [subEmail, setSubEmail] = useState('')
-  const [subStatus, setSubStatus] = useState('idle')
 
   const handleChange = e => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-    if (status !== 'idle') setStatus('idle')
+    if (status === 'success' || status === 'error') setStatus('idle')
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
-    if (!form.name || !form.email || !form.message) return
+    if (!canSend || status === 'sending' || !form.name.trim() || !form.email.trim() || !form.message.trim()) return
     setStatus('sending')
 
-    if (!web3formsKey || web3formsKey.includes('YOUR_')) {
-      setTimeout(() => {
-        setStatus('success')
-        setForm({ name: '', email: '', message: '' })
-      }, 1000)
-      return
-    }
-
     try {
-      // 使用隐藏的 iframe + form 提交，绕过 CORS 限制
-      const iframeId = 'web3forms-iframe'
-      let iframe = document.getElementById(iframeId)
-      if (!iframe) {
-        iframe = document.createElement('iframe')
-        iframe.id = iframeId
-        iframe.name = iframeId
-        iframe.style.display = 'none'
-        document.body.appendChild(iframe)
-      }
-
-      const formEl = document.createElement('form')
-      formEl.method = 'POST'
-      formEl.action = 'https://api.web3forms.com/submit'
-      formEl.target = iframeId
-
-      const fields = {
-        access_key: web3formsKey,
-        name: form.name,
-        email: form.email,
-        message: form.message,
-        subject: `来自 ${form.name} 的新消息`,
-        from_name: form.name,
-      }
-
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('input')
-        input.type = 'hidden'
-        input.name = key
-        input.value = value
-        formEl.appendChild(input)
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          access_key: web3formsKey,
+          subject: `来自 ${form.name} 的新消息`,
+          from_name: form.name,
+        }),
+        signal: AbortSignal.timeout(15000),
       })
-
-      document.body.appendChild(formEl)
-      formEl.submit()
-      document.body.removeChild(formEl)
-
-      // iframe 加载完成即表示提交成功
-      iframe.onload = () => {
-        setStatus('success')
-        setForm({ name: '', email: '', message: '' })
+      const result = await response.json()
+      if (!response.ok || result.success !== true) {
+        setStatus('error')
+        return
       }
-
-      // 超时回退
-      setTimeout(() => {
-        if (status === 'sending') {
-          setStatus('success')
-          setForm({ name: '', email: '', message: '' })
-        }
-      }, 3000)
-    } catch (err) {
-      console.error('Submit error:', err)
+      setStatus('success')
+      setForm({ name: '', email: '', message: '' })
+    } catch {
       setStatus('error')
     }
-  }
-
-  const handleSubscribe = async e => {
-    e.preventDefault()
-    if (!subEmail) return
-    setSubStatus('sending')
-    setTimeout(() => {
-      setSubStatus('success')
-      setSubEmail('')
-    }, 800)
   }
 
   return (
@@ -163,89 +112,78 @@ export default function ContactPage() {
                 <Bell size={14} className="opacity-60" />
                 <h3 className="text-sm font-medium">订阅更新</h3>
               </div>
-              <p className="text-xs opacity-40 mb-4">输入邮箱，获取最新文章与项目动态。</p>
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <input
-                  type="email"
-                  required
-                  value={subEmail}
-                  onChange={e => { setSubEmail(e.target.value); setSubStatus('idle') }}
-                  placeholder="your@email.com"
-                  className="flex-1 px-3 py-2 rounded-lg bg-white dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all"
-                />
-                <button
-                  type="submit"
-                  disabled={subStatus === 'sending'}
-                  className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
-                >
-                  {subStatus === 'success' ? '已订阅' : '订阅'}
-                </button>
-              </form>
+              <SubscribeBar mailchimpUrl={services?.mailchimpUrl} />
             </div>
           </div>
 
           {/* 右侧：联系表单 */}
           <div className="bg-white dark:bg-stone-800/40 rounded-2xl border border-stone-200/40 dark:border-stone-700/40 p-6 md:p-8 shadow-sm">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium mb-1.5">姓名</label>
-                <input
-                  name="name"
-                  required
-                  value={form.name}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all"
-                  placeholder="你的名字"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1.5">邮箱</label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1.5">留言 *</label>
-                <textarea
-                  name="message"
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all resize-none"
-                  placeholder="想对我说点什么..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === 'sending'}
-                className="w-full flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
-              >
-                <Send size={14} />
-                {status === 'sending' ? '发送中...' : status === 'success' ? '发送成功' : '发送留言'}
-              </button>
-
-              {status === 'success' && (
-                <div className="flex items-center justify-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
-                  <CheckCircle size={14} />
-                  消息已发送，我会尽快回复
+            <form onSubmit={handleSubmit}>
+              <fieldset disabled={status === 'sending'} className="space-y-5 min-w-0">
+                <div>
+                  <label htmlFor="contact-name" className="block text-sm font-medium mb-1.5">姓名</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all"
+                    placeholder="你的名字"
+                  />
                 </div>
-              )}
-              {status === 'error' && (
-                <div className="flex items-center justify-center gap-1.5 text-sm text-red-500">
-                  <AlertCircle size={14} />
-                  发送失败，请重试
+
+                <div>
+                  <label htmlFor="contact-email" className="block text-sm font-medium mb-1.5">邮箱</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all"
+                    placeholder="your@email.com"
+                  />
                 </div>
-              )}
+
+                <div>
+                  <label htmlFor="contact-message" className="block text-sm font-medium mb-1.5">留言 *</label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    rows={5}
+                    value={form.message}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 text-sm transition-all resize-none"
+                    placeholder="想对我说点什么..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!canSend || status === 'sending'}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                >
+                  <Send size={14} />
+                  {status === 'sending' ? '发送中...' : status === 'success' ? '发送成功' : '发送留言'}
+                </button>
+                {!canSend && <p className="text-sm">留言服务暂不可用，请通过邮箱联系。</p>}
+
+                {status === 'success' && (
+                  <div role="status" className="flex items-center justify-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
+                    <CheckCircle size={14} />
+                    消息已发送，我会尽快回复
+                  </div>
+                )}
+                {status === 'error' && (
+                  <div role="alert" className="flex items-center justify-center gap-1.5 text-sm text-red-600 dark:text-red-400">
+                    <AlertCircle size={14} />
+                    发送失败，请重试
+                  </div>
+                )}
+              </fieldset>
             </form>
           </div>
 
